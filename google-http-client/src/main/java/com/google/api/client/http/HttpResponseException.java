@@ -42,6 +42,9 @@ public class HttpResponseException extends IOException {
   /** HTTP response content or {@code null} for none. */
   private final String content;
 
+  /** Number of retries performed */
+  private final int retryCount;
+
   /**
    * Constructor that constructs a detail message from the given HTTP response that includes the
    * status code, status message and HTTP response content.
@@ -73,6 +76,7 @@ public class HttpResponseException extends IOException {
     statusMessage = builder.statusMessage;
     headers = builder.headers;
     content = builder.content;
+    retryCount = builder.retryCount;
   }
 
   /**
@@ -121,6 +125,15 @@ public class HttpResponseException extends IOException {
     return content;
   }
 
+  /** 
+   * Returns the retry count 
+   * 
+   * @since 
+  */
+  public final int getRetryCount() {
+    return retryCount;
+  }
+
   /**
    * Builder.
    *
@@ -144,6 +157,9 @@ public class HttpResponseException extends IOException {
 
     /** Detail message to use or {@code null} for none. */
     String message;
+
+    /** Number of retries performed */
+    int retryCount;
 
     /**
      * @param statusCode HTTP status code
@@ -257,6 +273,20 @@ public class HttpResponseException extends IOException {
      */
     public Builder setContent(String content) {
       this.content = content;
+      return this;
+    }
+
+    /** Returns the retry count */
+    public final int getRetryCount() {
+      return retryCount;
+    }
+
+    /**
+     * Sets the retry count for the related HTTP request execution. 
+     */
+    public Builder setRetryCount(int retryCount) {
+      Preconditions.checkArgument(retryCount >= 0);
+      this.retryCount = retryCount;
       return this;
     }
 
